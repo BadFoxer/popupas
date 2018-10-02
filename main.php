@@ -128,9 +128,10 @@ add_action( 'wp_enqueue_scripts', 'pop_setting_cookie' );
     endforeach; 
              // create variable and set response from database comlun date
             $pop_dateofbirth = $pop_res->date; 
-            // if the current equals data of birth get response form $bfp_popup
+            // if the currentDate equals dateofbirth
            if($pop_currentDate == $pop_dateofbirth){
-
+		   
+         //get response form $bfp_popup
            $bfp_popup = '
 <!-- Modal -->
 <div class="modal fade" id="mod" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
