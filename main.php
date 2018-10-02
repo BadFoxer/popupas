@@ -131,7 +131,7 @@ add_action( 'wp_enqueue_scripts', 'pop_setting_cookie' );
             // if the currentDate equals dateofbirth
            if($pop_currentDate == $pop_dateofbirth){
 		   
-         //get response form $bfp_popup
+        
            $bfp_popup = '
 <!-- Modal -->
 <div class="modal fade" id="mod" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -152,7 +152,8 @@ add_action( 'wp_enqueue_scripts', 'pop_setting_cookie' );
   </div>
 </div>
 </div>';
-
+		   
+ //return response form $bfp_popup
   return $bfp_popup;
 }
 }
