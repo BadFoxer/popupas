@@ -121,7 +121,7 @@ add_action( 'wp_enqueue_scripts', 'pop_setting_cookie' );
      $img2 =  preg_replace("/<em>[^>]+\>/i", '', $img);
      $img3 =  preg_replace("/<strong>[^>]+\>/i", '', $img2);
 
-    // combine string in to one
+    // combine strings in to one
     $pop_all.=$title3."</br></br>".$img3."</br></br>".$text3."</br></br></br>";
 
 
