@@ -40,12 +40,12 @@ function bfp_init_CountRecords(){
  $bfp_counter - count all records of current date
 */
 global $wpdb;
-global $bfp_dateResults;
+global $bfp_dataResults;
 global $bfp_counter;
 global $bfp_currentDate;
 $bfp_currentDate = date("Y-m-d");
-$bfp_dateResults = $wpdb->get_results( "SELECT text_for_date, published FROM wp_spidercalendar_event  WHERE date='$bfp_currentDate' AND published='1'");
-$bfp_counter = count($bfp_dateResults);
+$bfp_dataResults = $wpdb->get_results( "SELECT text_for_date, published FROM wp_spidercalendar_event  WHERE date='$bfp_currentDate' AND published='1'");
+$bfp_counter = count($bfp_dataResults);
 
 
 }
@@ -58,7 +58,6 @@ add_action( 'wp_enqueue_scripts', 'bfp_init_CountRecords' );
 function pop_setting_cookie() {
 bfp_init_CountRecords(); // call function countRecords
 global $bfp_counter; // set counter to gobal
-global $bfp_published;
 $cookie_name = "sausainis"; // cookie name
 $cookie_value= $bfp_counter; //cookie value is recordsCount
 $timestamp = time() + 120;  //example: 86400 = 1 day 
