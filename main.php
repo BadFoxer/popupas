@@ -44,8 +44,10 @@ global $bfp_dateResults;
 global $bfp_counter;
 global $bfp_currentDate;
 $bfp_currentDate = date("Y-m-d");
-$bfp_dateResults = $wpdb->get_results( "SELECT text_for_date FROM wp_spidercalendar_event  WHERE date='$bfp_currentDate'");
+$bfp_dateResults = $wpdb->get_results( "SELECT text_for_date, published FROM wp_spidercalendar_event  WHERE date='$bfp_currentDate' AND published='1'");
 $bfp_counter = count($bfp_dateResults);
+
+
 }
 
 /* call function in template then plugin is active */
@@ -56,6 +58,7 @@ add_action( 'wp_enqueue_scripts', 'bfp_init_CountRecords' );
 function pop_setting_cookie() {
 bfp_init_CountRecords(); // call function countRecords
 global $bfp_counter; // set counter to gobal
+global $bfp_published;
 $cookie_name = "sausainis"; // cookie name
 $cookie_value= $bfp_counter; //cookie value is recordsCount
 $timestamp = time() + 120;  //example: 86400 = 1 day 
@@ -98,7 +101,7 @@ add_action( 'wp_enqueue_scripts', 'pop_setting_cookie' );
      global $wpdb;
      $pop_all =''; // blank variable
      $pop_currentDate = date("Y-m-d"); // get current date
-     $pop_results = $wpdb->get_results( "SELECT  date,text_for_date  FROM wp_spidercalendar_event WHERE date='$pop_currentDate'");
+     $pop_results = $wpdb->get_results( "SELECT  date, text_for_date, published  FROM wp_spidercalendar_event WHERE date='$pop_currentDate' AND published='1'");
      //fetch all data from text_for_date column in database
      foreach ($pop_results as $pop_res):
       
@@ -121,17 +124,17 @@ add_action( 'wp_enqueue_scripts', 'pop_setting_cookie' );
      $img2 =  preg_replace("/<em>[^>]+\>/i", '', $img);
      $img3 =  preg_replace("/<strong>[^>]+\>/i", '', $img2);
 
-    // combine strings in to one
+    // combine string in to one
     $pop_all.=$title3."</br></br>".$img3."</br></br>".$text3."</br></br></br>";
 
 
     endforeach; 
              // create variable and set response from database comlun date
-            $pop_dateofbirth = $pop_res->date; 
-            // if the currentDate equals dateofbirth
-           if($pop_currentDate == $pop_dateofbirth){
-		   
-        
+            $pop_dateofbirth = $pop_res->date;
+            $pop_published =$pop_res->published;
+            // if the current equals data of birth get response form $bfp_popup
+           if($pop_currentDate == $pop_dateofbirth  && $pop_published){
+
            $bfp_popup = '
 <!-- Modal -->
 <div class="modal fade" id="mod" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -152,8 +155,7 @@ add_action( 'wp_enqueue_scripts', 'pop_setting_cookie' );
   </div>
 </div>
 </div>';
-		   
- //return response form $bfp_popup
+
   return $bfp_popup;
 }
 }
