@@ -44,7 +44,7 @@ global $bfp_dataResults;
 global $bfp_counter;
 global $bfp_currentDate;
 $bfp_currentDate = date("Y-m-d");
-$bfp_dataResults = $wpdb->get_results( "SELECT text_for_date, published FROM wp_spidercalendar_event  WHERE date='$bfp_currentDate' AND published='1'");
+$bfp_dataResults = $wpdb->get_results( "SELECT date,text_for_date, published FROM wp_spidercalendar_event  WHERE date='$bfp_currentDate' AND published='1'");
 $bfp_counter = count($bfp_dataResults);
 
 
@@ -98,34 +98,41 @@ add_action( 'wp_enqueue_scripts', 'pop_setting_cookie' );
  function bfp_popup_modal_show(){
      // get results from database
      global $wpdb;
+     global $bfp_dataResults; // set query variable to global 
      $pop_all =''; // blank variable
      $pop_currentDate = date("Y-m-d"); // get current date
-     $pop_results = $wpdb->get_results( "SELECT  date, text_for_date, published  FROM wp_spidercalendar_event WHERE date='$pop_currentDate' AND published='1'");
+
+       //this query no loger needed
+    // $pop_results = $wpdb->get_results( "SELECT  date, text_for_date, published  FROM wp_spidercalendar_event WHERE date='$pop_currentDate' AND published='1'");
+
+
      //fetch all data from text_for_date column in database
-     foreach ($pop_results as $pop_res):
+     foreach ($bfp_dataResults as $pop_res):
       
      $pop_response = $pop_res->text_for_date;
+
        
       //replace strings and cut in to pieces 
 
-      //main text 
-      $text=  preg_replace('//', '', $pop_response);
-      $text2=  preg_replace("/<img [^>]+\>/i", '', $text);
-      $text3 =  preg_replace("/<strong>[^>]+\>/i", '', $text2);
   
       // tiitle text
-      $title=  preg_replace('//', '', $pop_response);
-      $title2=  preg_replace("/<img [^>]+\>/i", '', $title);
+      $title =  preg_replace('//', '', $pop_response);
+      $title2 =  preg_replace("/<img [^>]+\>/i", '', $title);
       $title3 =  preg_replace("/<em>[^>]+\>/i", '', $title2);
 
+            //main text 
+      $text =  preg_replace('//', '', $pop_response);
+      $text2 =  preg_replace("/<img [^>]+\>/i", '', $text);
+      $text3 =  preg_replace("/<strong>[^>]+\>/i", '', $text2);
+      
+
       // image
-     $img=  preg_replace('//', '', $pop_response);
+     $img =  preg_replace('//', '', $pop_response);
      $img2 =  preg_replace("/<em>[^>]+\>/i", '', $img);
      $img3 =  preg_replace("/<strong>[^>]+\>/i", '', $img2);
 
     // combine string in to one
-    $pop_all.=$title3."</br></br>".$img3."</br></br>".$text3."</br></br></br>";
-
+    $pop_all.= "<p>".$title3."</p><p>".$img3."</p><p>".$text3."</p>";
 
     endforeach; 
              // create variable and set response from database comlun date
@@ -135,7 +142,7 @@ add_action( 'wp_enqueue_scripts', 'pop_setting_cookie' );
            if($pop_currentDate == $pop_dateofbirth  && $pop_published){
 
            $bfp_popup = '
-<!-- Modal -->
+<!-- Modal pop up box bootstrap-->
 <div class="modal fade" id="mod" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-m" role="document">
     <div class="modal-content" >
